@@ -13,7 +13,7 @@ TFT_eSPI tft = TFT_eSPI();  // Invoke library
 #include <SoftwareSerial.h>
 TinyGPSPlus gps;
 static const int RXPin = 19, TXPin = 18; //i pin per la connessione del gps
-static const uint32_t GPSBaud = 4800; // il baudrate tra gps e esp32
+static const uint32_t GPSBaud = 9600; // il baudrate tra gps e esp32
 SoftwareSerial ss(RXPin, TXPin); //la connessione tra il gps e il device
 
 //IMPORTO LA LIBRERIA PER IL WIFI:
@@ -135,6 +135,12 @@ pinMode(21,INPUT); //bottone_4
 //inizializzo la seriale per il debug:
 Serial.begin(115200);
 
+//inizializzo la seriale per il gps:
+ss.begin(GPSBaud);
+
+
+//inizializzo lo shermo.
+
   tft.init();
   tft.setRotation(1); 
   tft.fillScreen(TFT_BLACK);
@@ -151,7 +157,7 @@ EEPROM.begin(EEPROM_SIZE);
   WiFi.disconnect();
 
 
-
+//salvo delle stringhe che mi serviranno per salvare le reti nella eeprom
 string_ssid = String();
 string_finale_net = String();
 
@@ -590,13 +596,13 @@ tft.setCursor(2,70, 2);
   delay(100);
 
   tft.setCursor(2,225, 2);
-  tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+  tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
   tft.println("lat:");
 
     delay(100);
 
-  tft.setCursor(160,225, 2);
-  tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+  tft.setCursor(120,225, 2);
+  tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
   tft.println("lon:");
 
   delay(200);
@@ -607,13 +613,22 @@ tft.setCursor(2,70, 2);
 
   delay(200);
 
-    tft.setCursor(180,225, 2);
+    tft.setCursor(140,225, 2);
       tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
       tft.println(" --- ");
 
-  tft.setCursor(180,225, 2);
+    delay(200);
+
+    tft.setCursor(240,225, 2);
+      tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+      tft.println("Sats:");
+
+       delay(200);
+
+    tft.setCursor(270,225, 2);
       tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
-      tft.println(" --- ");
+      tft.println(" -- ");
+
 
   tft.setCursor(300,30, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
@@ -622,6 +637,33 @@ tft.setCursor(2,70, 2);
 active_menu_animated = 0;
 
 }
+
+//eseguo le istruzioni per il gps:
+while (ss.available() > 0)
+    if (gps.encode(ss.read()))
+      if (gps.location.isValid()){
+
+      tft.fillRect(20,225,90,20, TFT_BLACK);
+      tft.fillRect(140,225,90,20, TFT_BLACK);
+      tft.fillRect(270,225,50,20, TFT_BLACK);
+
+      tft.setCursor(30,225, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.location.lat(), 6);
+
+      tft.setCursor(150,225, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.location.lng(), 6);
+
+      tft.setCursor(280,225, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.satellites.value());
+  
+
+  }
+
+      
+
 
 
 
@@ -3283,6 +3325,10 @@ button_2_last_state = false;
 }
 } //option_6
 
+
+
+
+// OPTION_7 NETWORK SCAN --------------------------------------------------------------------------------------------------------------------------------
 
 
 
