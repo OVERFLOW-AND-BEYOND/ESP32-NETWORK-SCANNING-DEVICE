@@ -24,7 +24,7 @@ SoftwareSerial ss(RXPin, TXPin); //la connessione tra il gps e il device
 //IMPORTO LA LIBRERIA PER LA EEPROM:
 #include<EEPROM.h>
 //DEFINISCO LE DIMENSIONI DELLA EEPROM:
-#define EEPROM_SIZE 8192
+#define EEPROM_SIZE 4096
 
 
 
@@ -116,7 +116,9 @@ int inWrite_int = 0;
 String string_ssid;
 String string_finale_net;
 
+//variabili_option_7:
 
+String string_finale_gps;
 
 
 void setup(){
@@ -160,6 +162,7 @@ EEPROM.begin(EEPROM_SIZE);
 //salvo delle stringhe che mi serviranno per salvare le reti nella eeprom
 string_ssid = String();
 string_finale_net = String();
+string_finale_gps = String();
 
 
 }
@@ -3262,7 +3265,7 @@ string_ssid = string_ssid + " }";
 
 }
 
-Serial.println(string_ssid);
+
 
 
 //preparo la stringa finale da inserire nella eeprom:
@@ -3274,8 +3277,7 @@ string_finale_net = string_finale_net + string_ssid;
 string_finale_net = string_finale_net + "  ||| ";
 string_finale_net = string_finale_net + ">";
 
-Serial.println(string_finale_net);
-Serial.println(string_finale_net[0]);
+
 
 
 for (int i = 0; i < string_finale_net.length(); i++){
@@ -3328,9 +3330,433 @@ button_2_last_state = false;
 
 
 
-// OPTION_7 NETWORK SCAN --------------------------------------------------------------------------------------------------------------------------------
+// OPTION_7 SAVE CURRENT COORDINATES --------------------------------------------------------------------------------------------------------------------------------
+
+if (option_7){
+if (option_7_animated){
+
+code = 0;
+start_address = 0;
+
+tft.setCursor(70,30, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("SAVE CURRENT GPS DATA:");
+
+delay(50);
+
+tft.setCursor(10,50, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("lat:");
+
+delay(50);
+
+tft.setCursor(10,70, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("lon:");
+
+delay(50);
+
+tft.setCursor(10,90, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("date:");
+
+delay(50);
+
+tft.setCursor(150,50, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("time:");
+
+delay(50);
+
+tft.setCursor(150,70, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("altitude:");
+
+delay(50);
+
+tft.setCursor(30,50, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(30,70, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(40,90, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(180,50, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(200,70, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.drawLine(25,120, 295, 120,TFT_WHITE);
+
+delay(50);
 
 
+tft.setCursor(10,130, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("The data will be saved with the following code:");
+
+delay(100);
+
+tft.setCursor(10,150, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Button 4: increase");
+
+delay(100);
+
+tft.setCursor(10,170, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Button 3: decrease");
+
+delay(100);
+
+tft.setCursor(200,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("CODE:");
+
+delay(100);
+
+tft.setCursor(240,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("0");
+
+
+delay(100);
+
+tft.setCursor(60,192, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use button 1 to return to menu");
+
+delay(100);
+
+tft.setCursor(60,205, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use button 2 to save the data");
+
+
+
+
+tft.setCursor(145,225, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("SAVE");
+
+delay(100);
+
+tft.setCursor(180,225, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("<<<");
+
+
+
+option_7_animated = false;
+
+}//option_7_animated
+
+
+//eseguo le istruzioni per il gps:
+while (ss.available() > 0)
+    if (gps.encode(ss.read()))
+      if (gps.location.isValid()){
+
+      tft.fillRect(30,50,90,20, TFT_BLACK);
+      tft.fillRect(30,70,90,20, TFT_BLACK);
+      tft.fillRect(40,90,90,20, TFT_BLACK);
+      tft.fillRect(180,50,90,20, TFT_BLACK);
+      tft.fillRect(200,70,90,20, TFT_BLACK);
+
+      tft.setCursor(40,50, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.location.lat(), 6);
+
+      tft.setCursor(40,70, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.location.lng(), 6);
+
+      char sz[32];
+      sprintf(sz, "%02d/%02d/%02d ", gps.date.month(), gps.date.day(), gps.date.year());
+
+      tft.setCursor(50,90, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(sz);
+
+      char tz[32];
+      sprintf(tz, "%02d:%02d:%02d ", gps.time.hour(), gps.time.minute(), gps.time.second());
+      
+
+      tft.setCursor(190,50, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(tz);
+
+       tft.setCursor(210,70, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.altitude.meters());
+
+  }
+
+
+
+
+//bottone di uscita
+  if (digitalRead(Button_1) == HIGH && button_1_last_state == false ){
+button_1_last_state = true;
+
+option_7_animated = true;
+option_7 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+code = 0;
+
+}
+
+if (digitalRead(Button_1) == LOW && button_1_last_state == true ){
+button_1_last_state = false;
+
+}
+
+
+//update the code of the packet:
+
+//bottone aumento code
+
+if (digitalRead(Button_4) == HIGH && button_4_last_state == false ){
+button_4_last_state = true;
+
+code += 1;
+
+tft.fillRect(240,160,50,20, TFT_BLACK);
+
+tft.setCursor(240,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(code);
+
+}
+
+if (digitalRead(Button_4) == LOW && button_4_last_state == true ){
+button_4_last_state = false;
+
+}
+
+
+//bottone diminuzione code
+
+if (digitalRead(Button_3) == HIGH && button_3_last_state == false ){
+button_3_last_state = true;
+
+code -= 1;
+
+tft.fillRect(240,160,50,20, TFT_BLACK);
+
+tft.setCursor(240,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(code);
+
+}
+
+if (digitalRead(Button_3) == LOW && button_3_last_state == true ){
+button_3_last_state = false;
+
+}
+
+
+
+
+
+//bottone salva
+
+if (digitalRead(Button_2) == HIGH && button_2_last_state == false ){
+button_2_last_state = true;
+
+/*
+String string_finale_gps;
+
+tring_finale_net = string_finale_net + "< NETWORK DATA DUMP - CODE: ";
+string_finale_net = string_finale_net + code;
+string_finale_net = string_finale_net + "  |||  ";
+string_finale_net = string_finale_net + string_ssid;
+string_finale_net = string_finale_net + "  ||| ";
+string_finale_net = string_finale_net + ">";
+
+*/
+
+string_finale_gps = "";
+
+
+if (EEPROM.read(0) == 255){
+
+string_finale_gps = string_finale_gps + "< GPS DATA DUMP - CODE: ";
+string_finale_gps = string_finale_gps + code;
+string_finale_gps = string_finale_gps + "  |||  ";
+
+string_finale_gps = string_finale_gps + "{ ";
+string_finale_gps = string_finale_gps + "lat: ";
+
+
+//latitudine 
+char buff[32];
+sprintf(buff, "%f",gps.location.lat() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "lon: ";
+
+//longitudine
+sprintf(buff, "%f",gps.location.lng() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "date: ";
+
+//date:
+sprintf(buff, "%02d/%02d/%02d ", gps.date.month(), gps.date.day(), gps.date.year());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "time: ";
+
+//time
+sprintf(buff, "%02d:%02d:%02d ", gps.time.hour(), gps.time.minute(), gps.time.second());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "alt: ";
+
+//altitude:
+sprintf(buff, "%f",gps.altitude.meters());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " }";
+
+string_finale_gps = string_finale_gps + "  |||  ";
+string_finale_gps = string_finale_gps + ">";
+
+
+
+
+for (int i = 0; i < string_finale_gps.length(); i++){
+  EEPROM.write(i,string_finale_gps[i]);
+}
+if  (EEPROM.commit()){
+  Serial.println("TRUE");
+}
+if  (EEPROM.commit() == false){
+  Serial.println("FALSE");
+}
+
+
+} else{
+
+for (int i = 0; i < EEPROM_SIZE; i++){
+  if (EEPROM.read(i) == 62 && EEPROM.read(i + 1) == 255){
+    start_address = i+1;
+  }
+}
+
+string_finale_gps = string_finale_gps + "< GPS DATA DUMP - CODE: ";
+string_finale_gps = string_finale_gps + code;
+string_finale_gps = string_finale_gps + "  |||  ";
+
+string_finale_gps = string_finale_gps + "{ ";
+string_finale_gps = string_finale_gps + "lat: ";
+
+
+//latitudine 
+char buff[32];
+sprintf(buff, "%f",gps.location.lat() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "lon: ";
+
+//longitudine
+sprintf(buff, "%f",gps.location.lng() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "date: ";
+
+//date:
+sprintf(buff, "%02d/%02d/%02d ", gps.date.month(), gps.date.day(), gps.date.year());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "time: ";
+
+//time
+sprintf(buff, "%02d:%02d:%02d ", gps.time.hour(), gps.time.minute(), gps.time.second());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "alt: ";
+
+//altitude:
+sprintf(buff, "%f",gps.altitude.meters());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " }";
+
+string_finale_gps = string_finale_gps + "  |||  ";
+string_finale_gps = string_finale_gps + ">";
+
+
+
+
+
+
+for (int i = 0; i < string_finale_gps.length(); i++){
+  EEPROM.write(i + start_address,string_finale_gps[i]);
+}
+if  (EEPROM.commit()){
+  Serial.println("TRUE");
+}
+if  (EEPROM.commit() == false){
+  Serial.println("FALSE");
+}
+
+
+
+}
+
+
+//dovo aver finito la scrittura, esce
+option_7_animated = true;
+option_7 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+code = 0;
+string_finale_gps = "";
+start_address = 0;
+
+}
+
+if (digitalRead(Button_2) == LOW && button_2_last_state == true ){
+button_2_last_state = false;
+
+}
+
+
+
+
+
+}//option_7
 
 
 
