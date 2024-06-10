@@ -3760,4 +3760,1200 @@ button_2_last_state = false;
 
 
 
+// OPTION_8 SAVE COORDINATES AND SSID --------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+if (option_8){
+
+if (option_8_animated){
+
+
+tft.setCursor(50,30, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("SCANNING FOR NEARBY NETWORKS:");
+
+delay(200);
+
+tft.drawLine(5,50, 315, 50,TFT_WHITE);
+delay(50);
+tft.drawLine(5,50, 5, 190,TFT_WHITE);
+delay(50);
+tft.drawLine(315,50, 315, 190,TFT_WHITE);
+delay(50);
+tft.drawLine(5,190, 315, 190,TFT_WHITE);
+
+delay(100);
+
+tft.setCursor(2,200, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Do you want to start the scanning procedure?");
+
+delay(150);
+
+tft.setCursor(50,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("YES");
+
+delay(100);
+
+tft.setCursor(250,220, 2);
+tft.setTextColor(TFT_RED);  tft.setTextSize(1);
+tft.println("NO");
+
+delay(200);
+
+
+tft.setCursor(15,60, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("-");
+
+delay(50);
+
+
+tft.setCursor(25,60, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Once the scanning procedure is started");
+
+delay(50);
+
+tft.setCursor(25,80, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("it will update network data every 5 seconds.");
+
+delay(50);
+
+tft.setCursor(15,100, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("-");
+
+delay(50);
+
+tft.setCursor(25,100, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("While scanning, use button 4 to see networks ");
+
+delay(50);
+
+tft.setCursor(25,120, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("and button 3 to scroll the network's data");
+
+delay(50);
+
+tft.setCursor(15,140, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("-");
+
+delay(50);
+
+
+tft.setCursor(25,140, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use button 1 to exit at any moment");
+
+delay(50);
+
+tft.setCursor(15,160, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("-");
+
+delay(50);
+
+tft.setCursor(25,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("And button 2 to save the collected data");
+
+delay(200);
+
+tft.setCursor(280,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("<<");
+
+
+
+
+
+option_8_animated = false;
+pointer_value = 0;
+
+}
+
+
+if (change_ui_6_1 == 0 && save_eeprom == 0){
+
+if (digitalRead(Button_3) == HIGH && button_3_last_state == false ){
+button_3_last_state = true;
+
+tft.fillRect(280 - (200 * pointer_value),220,300 - (200 * pointer_value) ,230, TFT_BLACK);
+
+pointer_value = pointer_value +1;
+
+if (pointer_value > 1){
+  pointer_value = 0;
+}
+if (pointer_value < 0){
+  pointer_value = 1;
+}
+
+tft.setCursor(280 - (200 * pointer_value) ,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("<<");
+
+
+
+}
+
+if (digitalRead(Button_3) == LOW && button_3_last_state == true ){
+button_3_last_state = false;
+
+}
+
+
+if (digitalRead(Button_4) == HIGH && button_4_last_state == false ){
+button_4_last_state = true;
+
+tft.fillRect(280 - (200 * pointer_value),220,300 - (200 * pointer_value) ,230, TFT_BLACK);
+
+pointer_value = pointer_value -1;
+
+if (pointer_value > 1){
+  pointer_value = 0;
+}
+if (pointer_value < 0){
+  pointer_value = 1;
+}
+
+tft.setCursor(280 - (200 * pointer_value) ,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("<<");
+
+
+
+}
+
+if (digitalRead(Button_4) == LOW && button_4_last_state == true ){
+button_4_last_state = false;
+
+}
+
+
+
+
+if (digitalRead(Button_2) == HIGH && button_2_last_state == false ){
+button_2_last_state = true;
+
+if (pointer_value == 0){
+
+option_8_animated = true;
+option_8 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+change_ui_6_1_animated = 1;
+change_ui_6_1 = 0;
+
+}
+
+if (pointer_value == 1){
+
+//PASSA ALLA SECONDA FASE DELLA UI
+change_ui_6_1 = 1;
+
+
+
+
+}
+
+}
+
+
+
+
+if (digitalRead(Button_2) == LOW && button_2_last_state == true ){
+button_2_last_state = false;
+
+}
+
+
+}//change_ui_6_1 == 0;
+
+//SECONDA FASE DELLA UI
+/*
+int change_ui_6_1 = 0;
+int change_ui_6_1_animated = 1; 
+*/
+
+if (change_ui_6_1 == 1){
+
+if (change_ui_6_1_animated == 1){
+
+  tft.fillRect(0,200,320,40,TFT_BLACK); //CANCELLO tutto quello in basso
+  delay(100);
+  tft.fillRect(6,51,309,139,TFT_BLACK); //CANCELLO TUTTA LA CASELLA DI RENDERING
+  
+tft.setCursor(2,200, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Networks found:");
+
+delay(100);
+
+tft.setCursor(120,200, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("-");
+
+
+  delay(100);
+
+  
+tft.setCursor(2,220, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Visualised networks:      /");
+
+delay(100);
+
+tft.setCursor(140,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("--");
+
+delay(100);
+
+tft.setCursor(175,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("--");
+
+
+  delay(100);
+
+tft.setCursor(230,200, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use btn 2");
+
+  delay(100);
+
+tft.setCursor(210,220, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("to save the data");
+
+delay(50);
+
+tft.drawLine(200,195, 200, 235,TFT_WHITE);
+
+
+change_ui_6_1_animated = 0;
+millis_1 = 1;
+
+}//change_ui_animated
+
+//variabili_option_6:
+/*
+int change_ui_6_1 = 0;
+int change_ui_6_1_animated = 1; 
+unsigned long millis_1 = 0;
+int frame_networks = 0;
+*/
+
+//BOTTONE PER USCIRE
+
+if (digitalRead(Button_1) == HIGH && button_1_last_state == false ){
+button_1_last_state = true;
+
+
+
+option_8_animated = true;
+option_8 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+change_ui_6_1_animated = 1;
+change_ui_6_1 = 0;
+millis_1 = 0;
+frame_networks = 0;
+
+
+}
+
+if (digitalRead(Button_1) == LOW && button_1_last_state == true ){
+button_1_last_state = false;
+
+}
+
+
+//bottone per cambiare network
+
+if (digitalRead(Button_4) == HIGH && button_4_last_state == false ){
+button_4_last_state = true;
+
+
+if (n > 6){
+  if (n - (6 * frame_networks) > 0){
+    frame_networks += 1;
+  }
+}
+
+if (n <= 6){
+
+frame_networks = 0;
+
+}
+
+
+if (n - (6 * frame_networks) <= 0){
+
+frame_networks = 0;
+
+}
+
+override_update = 1;
+
+
+}
+
+if (digitalRead(Button_4) == LOW && button_4_last_state == true ){
+button_4_last_state = false;
+
+}
+
+
+
+
+//bottone per cambiare da ssid a data
+
+if (digitalRead(Button_3) == HIGH && button_3_last_state == false ){
+button_3_last_state = true;
+
+
+if (data_view == 0){
+  data_view = 1;
+}else{
+  data_view = 0;
+}
+override_update = 1;
+
+
+}
+
+if (digitalRead(Button_3) == LOW && button_3_last_state == true ){
+button_3_last_state = false;
+
+}
+
+
+
+
+//bottone per scrivere dentro la eeeprom
+if (digitalRead(Button_2) == HIGH && button_2_last_state == false ){
+button_2_last_state = true;
+
+change_ui_6_1 = 0;
+change_ui_6_1_animated = 1;
+save_eeprom = 1;
+save_eeprom_animated = 1;
+
+
+}
+
+if (digitalRead(Button_2) == LOW && button_2_last_state == true ){
+button_2_last_state = false;
+
+}
+
+
+
+
+
+// UPDATE_NETWORK_LIST
+
+if (millis_1 != 0){
+
+if (millis() - millis_1 >= 15000 || override_update == 1){
+
+
+if (override_update == 0){
+
+millis_1 = millis();
+
+
+//AVVISO CHE STO FACENDO UPDATE
+tft.setCursor(50,172, 2);
+tft.setTextColor(TFT_RED);  tft.setTextSize(1);
+tft.println("Updating... (buttons won't work)");
+
+//ricansiona tutte le network
+n = WiFi.scanNetworks();
+
+tft.fillRect(50,172,200,13,TFT_BLACK); //CANCELLO IL MESSAGGIO UPDATING
+
+}
+
+
+tft.fillRect(6,51,309,139,TFT_BLACK); //CANCELLO TUTTA LA CASELLA DI RENDERING
+tft.fillRect(120,200,30,20,TFT_BLACK); //CANCELLO la sezione "netwoks found"
+
+tft.fillRect(140,220,20,20,TFT_BLACK); //CANCELLO la sezione "visualised_network"
+tft.fillRect(175,220,20,20,TFT_BLACK); //CANCELLO la sezione "visualised_network"
+
+tft.fillRect(35,30,280,20,TFT_BLACK); //CANCELLO la PARTE SOPRA
+
+
+//scrivo la sezione "networks found"
+tft.setCursor(120,200, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(n);
+
+
+if (n <= 6){
+
+
+tft.setCursor(140,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(n);
+
+}else{
+
+tft.setCursor(140,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("6");
+
+}
+
+
+
+
+tft.setCursor(175,220, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(n);
+
+
+
+if (data_view == 0){
+
+tft.fillRect(35,30,280,20,TFT_BLACK); //CANCELLO la PARTE SOPRA
+
+tft.setCursor(35,30, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("SSID:");
+
+
+for (int i = (6 * frame_networks); i < (6 + (6 * frame_networks)); ++i) {
+  
+tft.setCursor(15,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(i + 1);
+
+tft.setCursor(35,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(WiFi.SSID(i).c_str());
+
+}
+
+}else{
+
+tft.fillRect(35,30,280,20,TFT_BLACK); //CANCELLO la PARTE SOPRA
+
+tft.setCursor(35,30, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("RSSI:");
+
+tft.setCursor(120,30, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("CHANNEL:");
+
+tft.setCursor(200,30, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("ENCRYPTION:");
+
+
+for (int i = (6 * frame_networks); i < (6 + (6 * frame_networks)); ++i) {
+
+tft.setCursor(15,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(i + 1);
+
+
+tft.setCursor(35,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(WiFi.RSSI(i));
+
+tft.setCursor(120,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(WiFi.channel(i));
+
+switch (WiFi.encryptionType(i))
+{
+case WIFI_AUTH_OPEN:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("OPEN");
+    break;
+case WIFI_AUTH_WEP:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WEP");
+    break;
+case WIFI_AUTH_WPA_PSK:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WPA");
+    break;
+case WIFI_AUTH_WPA2_PSK:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WPA2");
+    break;
+case WIFI_AUTH_WPA_WPA2_PSK:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WPA+WPA2");
+    break;
+case WIFI_AUTH_WPA2_ENTERPRISE:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WPA2-EAP");
+    break;
+case WIFI_AUTH_WPA3_PSK:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WPA3");
+    break;
+case WIFI_AUTH_WPA2_WPA3_PSK:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WPA2+WPA3");
+    break;
+case WIFI_AUTH_WAPI_PSK:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("WAPI");
+    break;
+default:
+tft.setCursor(200,60 + (20 * (i - (6 * frame_networks)) ), 2);
+tft.setTextColor(TFT_RED);  tft.setTextSize(1);
+tft.println("UNKNOWN PROTOCOL");
+}
+
+
+
+
+}
+}
+
+override_update = 0;
+
+}
+}
+
+
+
+
+
+}//change_ui_6_1
+
+
+
+if (save_eeprom == 1){
+if (save_eeprom_animated == 1){
+
+
+code = 0;
+start_address = 0;
+
+tft.fillRect(0,16,320,240, TFT_BLACK);
+delay(100);
+
+tft.setCursor(35,30, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("SAVE CURRENT GPS AND NETWORK DATA:");
+
+delay(50);
+
+tft.setCursor(10,50, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("lat:");
+
+delay(50);
+
+tft.setCursor(10,70, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("lon:");
+
+delay(50);
+
+tft.setCursor(10,90, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("date:");
+
+delay(50);
+
+tft.setCursor(150,50, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("time:");
+
+delay(50);
+
+tft.setCursor(150,70, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("altitude:");
+
+delay(50);
+
+tft.setCursor(30,50, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(30,70, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(40,90, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(180,50, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.setCursor(200,70, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(" --- ");
+
+delay(50);
+
+tft.drawLine(25,120, 295, 120,TFT_WHITE);
+
+delay(50);
+
+
+tft.setCursor(10,130, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("The data will be saved with the following code:");
+
+delay(100);
+
+tft.setCursor(10,150, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Button 4: increase");
+
+delay(100);
+
+tft.setCursor(10,170, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Button 3: decrease");
+
+delay(100);
+
+tft.setCursor(200,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("CODE:");
+
+delay(100);
+
+tft.setCursor(240,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("0");
+
+
+delay(100);
+
+tft.setCursor(60,192, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use button 1 to return to menu");
+
+delay(100);
+
+tft.setCursor(60,205, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use button 2 to save the data");
+
+
+
+
+tft.setCursor(145,225, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("SAVE");
+
+delay(100);
+
+tft.setCursor(180,225, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("<<<");
+
+
+save_eeprom_animated = 0;
+
+}
+
+
+
+
+
+//eseguo le istruzioni per il gps:
+while (ss.available() > 0)
+    if (gps.encode(ss.read()))
+      if (gps.location.isValid()){
+
+      tft.fillRect(30,50,90,20, TFT_BLACK);
+      tft.fillRect(30,70,90,20, TFT_BLACK);
+      tft.fillRect(40,90,90,20, TFT_BLACK);
+      tft.fillRect(180,50,90,20, TFT_BLACK);
+      tft.fillRect(200,70,90,20, TFT_BLACK);
+
+      tft.setCursor(40,50, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.location.lat(), 6);
+
+      tft.setCursor(40,70, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.location.lng(), 6);
+
+      char sz[32];
+      sprintf(sz, "%02d/%02d/%02d ", gps.date.month(), gps.date.day(), gps.date.year());
+
+      tft.setCursor(50,90, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(sz);
+
+      char tz[32];
+      sprintf(tz, "%02d:%02d:%02d ", gps.time.hour(), gps.time.minute(), gps.time.second());
+      
+
+      tft.setCursor(190,50, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(tz);
+
+       tft.setCursor(210,70, 2);
+      tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+      tft.println(gps.altitude.meters());
+
+  }
+
+
+//update the code of the packet:
+
+//bottone aumento code
+
+if (digitalRead(Button_4) == HIGH && button_4_last_state == false ){
+button_4_last_state = true;
+
+code += 1;
+
+tft.fillRect(240,160,50,20, TFT_BLACK);
+
+tft.setCursor(240,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(code);
+
+}
+
+if (digitalRead(Button_4) == LOW && button_4_last_state == true ){
+button_4_last_state = false;
+
+}
+
+
+//bottone diminuzione code
+
+if (digitalRead(Button_3) == HIGH && button_3_last_state == false ){
+button_3_last_state = true;
+
+code -= 1;
+
+tft.fillRect(240,160,50,20, TFT_BLACK);
+
+tft.setCursor(240,160, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println(code);
+
+}
+
+if (digitalRead(Button_3) == LOW && button_3_last_state == true ){
+button_3_last_state = false;
+
+}
+
+
+
+
+
+//bottone exit menu
+
+if (digitalRead(Button_1) == HIGH && button_1_last_state == false ){
+button_1_last_state = true;
+
+option_8_animated = true;
+option_8 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+change_ui_6_1_animated = 1;
+change_ui_6_1 = 0;
+millis_1 = 0;
+frame_networks = 0;
+save_eeprom = 0;
+save_eeprom_animated = 1;
+
+
+}
+
+if (digitalRead(Button_1) == LOW && button_1_last_state == true ){
+button_1_last_state = false;
+
+}
+
+
+
+//bottone 2 (salva effettivamente nella eeprom,eseguendo le istruzioni necessarie).
+
+if (digitalRead(Button_2) == HIGH && button_2_last_state == false ){
+button_2_last_state = true;
+
+//APPUNTI SULLA LOGICA:
+/*
+Per quanto riguarda l'inizializzazione della scittura del pacchetto, ci sono due casi:
+
+ uno in cui sono ad address zero e non c'è scritto nulla, ed allora devo scrivere il carattere di inizio pacchetto e scirvere il pacchetto a partire da address 1
+ uno in cui sono ad address zero, quindi devo cercare un segno di fine pacchetto che non è seguito da uno di inizio pacchetto.
+
+ Queste sono le regole per la srittura dei pacchetti.
+
+ Carattere di inizio: <
+ Carattere di fine: >
+
+data_eeprom = EEPROM.read(random_address);
+  EEPROM.write(random_address,255);
+  EEPROM.commit();
+
+
+int start_address = 0;
+char carattere_inizio_pacchetto = '<';
+char carattere_fine_pacchetto = '>';
+int inWrite_int = 0;
+String string_ssid;
+String string_finale_net;
+
+*/
+
+
+if (EEPROM.read(0) == 255){
+
+
+for (int i = 0; i < n; i++){
+string_ssid = string_ssid + "{ ";
+string_ssid = string_ssid + (i + 1);
+string_ssid = string_ssid + ") ";
+string_ssid = string_ssid + WiFi.SSID(i).c_str();
+string_ssid = string_ssid + " / ";
+string_ssid = string_ssid + WiFi.RSSI(i);
+string_ssid = string_ssid + " / ";
+string_ssid = string_ssid + WiFi.channel(i);
+string_ssid = string_ssid + " / ";
+
+switch (WiFi.encryptionType(i))
+{
+case WIFI_AUTH_OPEN:
+
+string_ssid = string_ssid + "OPEN";
+    break;
+case WIFI_AUTH_WEP:
+string_ssid = string_ssid + "WEP";
+    break;
+case WIFI_AUTH_WPA_PSK:
+string_ssid = string_ssid + "WPA";
+    break;
+case WIFI_AUTH_WPA2_PSK:
+string_ssid = string_ssid + "WPA2";
+    break;
+case WIFI_AUTH_WPA_WPA2_PSK:
+string_ssid = string_ssid + "WPA+WPA2";
+    break;
+case WIFI_AUTH_WPA2_ENTERPRISE:
+string_ssid = string_ssid + "WPA2-EAP";
+    break;
+case WIFI_AUTH_WPA3_PSK:
+string_ssid = string_ssid + "WPA3";
+    break;
+case WIFI_AUTH_WPA2_WPA3_PSK:
+string_ssid = string_ssid + "WPA2+WPA3";
+    break;
+case WIFI_AUTH_WAPI_PSK:
+string_ssid = string_ssid + "WAPI";
+    break;
+default:
+string_ssid = string_ssid + "UNKNOWN PROTOCOL";
+
+}
+
+string_ssid = string_ssid + " }";
+
+}
+
+Serial.println(string_ssid);
+
+
+string_finale_gps = string_finale_gps + "{ ";
+string_finale_gps = string_finale_gps + "lat: ";
+
+
+//latitudine 
+char buff[32];
+sprintf(buff, "%f",gps.location.lat() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "lon: ";
+
+//longitudine
+sprintf(buff, "%f",gps.location.lng() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "date: ";
+
+//date:
+sprintf(buff, "%02d/%02d/%02d ", gps.date.month(), gps.date.day(), gps.date.year());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "time: ";
+
+//time
+sprintf(buff, "%02d:%02d:%02d ", gps.time.hour(), gps.time.minute(), gps.time.second());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "alt: ";
+
+//altitude:
+sprintf(buff, "%f",gps.altitude.meters());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " }";
+
+string_finale_gps = string_finale_gps + "  |||  ";
+string_finale_gps = string_finale_gps + ">";
+
+
+
+
+//preparo la stringa finale da inserire nella eeprom:
+
+string_finale_net = string_finale_net + "< NETWORK AND GPS DATA DUMP - CODE: ";
+string_finale_net = string_finale_net + code;
+string_finale_net = string_finale_net + "  |||  ";
+string_finale_net = string_finale_net + string_ssid;
+string_finale_net = string_finale_net + "  ||| ";
+string_finale_net = string_finale_net + string_finale_gps;
+
+
+Serial.println(string_finale_net);
+Serial.println(string_finale_net[0]);
+
+
+for (int i = 0; i < string_finale_net.length(); i++){
+  EEPROM.write(i,string_finale_net[i]);
+}
+if  (EEPROM.commit()){
+  Serial.println("TRUE");
+}
+if  (EEPROM.commit() == false){
+  Serial.println("FALSE");
+}
+
+} else {
+
+
+
+
+
+
+for (int i = 0; i < EEPROM_SIZE; i++){
+  if (EEPROM.read(i) == 62 && EEPROM.read(i + 1) == 255){
+    start_address = i+1;
+  }
+}
+
+
+for (int i = 0; i < n; i++){
+string_ssid = string_ssid + "{ ";
+string_ssid = string_ssid + (i + 1);
+string_ssid = string_ssid + ") ";
+string_ssid = string_ssid + WiFi.SSID(i).c_str();
+string_ssid = string_ssid + " / ";
+string_ssid = string_ssid + WiFi.RSSI(i);
+string_ssid = string_ssid + " / ";
+string_ssid = string_ssid + WiFi.channel(i);
+string_ssid = string_ssid + " / ";
+
+switch (WiFi.encryptionType(i))
+{
+case WIFI_AUTH_OPEN:
+
+string_ssid = string_ssid + "OPEN";
+    break;
+case WIFI_AUTH_WEP:
+string_ssid = string_ssid + "WEP";
+    break;
+case WIFI_AUTH_WPA_PSK:
+string_ssid = string_ssid + "WPA";
+    break;
+case WIFI_AUTH_WPA2_PSK:
+string_ssid = string_ssid + "WPA2";
+    break;
+case WIFI_AUTH_WPA_WPA2_PSK:
+string_ssid = string_ssid + "WPA+WPA2";
+    break;
+case WIFI_AUTH_WPA2_ENTERPRISE:
+string_ssid = string_ssid + "WPA2-EAP";
+    break;
+case WIFI_AUTH_WPA3_PSK:
+string_ssid = string_ssid + "WPA3";
+    break;
+case WIFI_AUTH_WPA2_WPA3_PSK:
+string_ssid = string_ssid + "WPA2+WPA3";
+    break;
+case WIFI_AUTH_WAPI_PSK:
+string_ssid = string_ssid + "WAPI";
+    break;
+default:
+string_ssid = string_ssid + "UNKNOWN PROTOCOL";
+
+}
+
+string_ssid = string_ssid + " }";
+
+}
+
+
+
+string_finale_gps = string_finale_gps + "{ ";
+string_finale_gps = string_finale_gps + "lat: ";
+
+
+//latitudine 
+char buff[32];
+sprintf(buff, "%f",gps.location.lat() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "lon: ";
+
+//longitudine
+sprintf(buff, "%f",gps.location.lng() );
+string_finale_gps = string_finale_gps + buff; 
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "date: ";
+
+//date:
+sprintf(buff, "%02d/%02d/%02d ", gps.date.month(), gps.date.day(), gps.date.year());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "time: ";
+
+//time
+sprintf(buff, "%02d:%02d:%02d ", gps.time.hour(), gps.time.minute(), gps.time.second());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " / ";
+string_finale_gps = string_finale_gps + "alt: ";
+
+//altitude:
+sprintf(buff, "%f",gps.altitude.meters());
+string_finale_gps = string_finale_gps + buff;
+
+string_finale_gps = string_finale_gps + " }";
+
+string_finale_gps = string_finale_gps + "  |||  ";
+string_finale_gps = string_finale_gps + ">";
+
+
+//preparo la stringa finale da inserire nella eeprom:
+
+string_finale_net = string_finale_net + "< NETWORK AND GPS DATA DUMP - CODE: ";
+string_finale_net = string_finale_net + code;
+string_finale_net = string_finale_net + "  |||  ";
+string_finale_net = string_finale_net + string_ssid;
+string_finale_net = string_finale_net + "  ||| ";
+string_finale_net = string_finale_net + string_finale_gps;
+
+
+
+
+
+
+for (int i = 0; i < string_finale_net.length(); i++){
+  EEPROM.write(i + start_address ,string_finale_net[i]);
+}
+if  (EEPROM.commit()){
+  Serial.println("TRUE");
+}
+if  (EEPROM.commit() == false){
+  Serial.println("FALSE");
+}
+
+
+}
+
+
+
+
+
+//dopo aver salvato tutto, esco.
+
+option_8_animated = true;
+option_8 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+change_ui_6_1_animated = 1;
+change_ui_6_1 = 0;
+millis_1 = 0;
+frame_networks = 0;
+save_eeprom = 0;
+save_eeprom_animated = 1;
+string_finale_net = "";
+string_ssid = "";
+pointer_value = 0;
+code = 0;
+string_finale_gps = "";
+start_address = 0;
+
+
+
+
+}
+
+if (digitalRead(Button_1) == LOW && button_2_last_state == true ){
+button_2_last_state = false;
+
+}
+
+
+}
+} //option_8
+
+
+
+
+
+
+
+
+
+
+
 }//void loop
