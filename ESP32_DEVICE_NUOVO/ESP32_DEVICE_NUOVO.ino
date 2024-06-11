@@ -3,6 +3,9 @@
 //ATTENZIONE: IL PIN MOSI (DELLO SCHERMO) è STATO SPOSTATO DA PIN 23 A PIN 25 PER EVITARE DI INTERFERIRE CON I PIN DELLA SD CARD
 //ATTENZIONE: QUESTI CAMBIAMENTI SONO VISIBILI NEL SEGUENTE FILE: C:\Users\Paride\Documents\Arduino\libraries\TFT_eSPI\User_Setup.h dentro la sezione "ESP32"
 
+
+
+
 #include <TFT_eSPI.h> // Graphics and font library for ILI9341 driver chip
 #include <SPI.h>
 TFT_eSPI tft = TFT_eSPI();  // Invoke library
@@ -4937,10 +4940,6 @@ start_address = 0;
 
 }
 
-if (digitalRead(Button_1) == LOW && button_2_last_state == true ){
-button_2_last_state = false;
-
-}
 
 
 }
@@ -4949,6 +4948,142 @@ button_2_last_state = false;
 
 
 
+// OPTION_9 SHOW CPU INFO --------------------------------------------------------------------------------------------------------------------------------
+
+
+if (option_9){
+if (option_9_animated){
+
+
+  	for(int i=0; i<17; i=i+8) {
+	  chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
+	}
+
+
+tft.setCursor(100,30, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("PROCESSOR INFO:");
+
+delay(50);
+
+tft.setCursor(10,50, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Processor model:");
+
+
+delay(50);
+
+tft.setCursor(10,70, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Processor id:");
+
+delay(50);
+
+tft.setCursor(10,90, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Processor revision:");
+
+
+delay(50);
+
+tft.setCursor(10,110, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Processor clock speed:");
+
+
+delay(50);
+
+tft.setCursor(10,130, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Configured eeprom size:");
+
+delay(50);
+
+tft.setCursor(10,150, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Time since boot (millis()): ");
+
+
+
+
+
+
+delay(50);
+
+tft.setCursor(180,50, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(ESP.getChipModel());
+
+
+delay(50);
+
+tft.setCursor(180,70, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(chipId);
+
+delay(50);
+
+tft.setCursor(180,90, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(ESP.getChipRevision());
+
+
+delay(50);
+
+tft.setCursor(180,110, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println("240Mhz (no realtime)");
+
+delay(50);
+
+tft.setCursor(180,130, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(EEPROM_SIZE);
+
+delay(50);
+
+tft.setCursor(180,150, 2);
+tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
+tft.println(millis());
+
+
+delay(50);
+
+tft.setCursor(90,190, 2);
+tft.setTextColor(TFT_WHITE);  tft.setTextSize(1);
+tft.println("Use button 1 to exit.");
+
+
+
+
+
+
+option_9_animated = 0;
+
+} // option_9_animated
+
+
+//bottone exit menu
+
+if (digitalRead(Button_1) == HIGH && button_1_last_state == false ){
+button_1_last_state = true;
+
+option_9_animated = true;
+option_9 = false;
+active_menu = 1;
+active_menu_animated = 1;
+pointer_value = 0;
+
+}
+
+if (digitalRead(Button_1) == LOW && button_1_last_state == true ){
+button_1_last_state = false;
+
+}
+
+
+
+} // option_9
 
 
 
