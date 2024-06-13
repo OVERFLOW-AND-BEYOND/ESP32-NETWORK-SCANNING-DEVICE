@@ -27,7 +27,7 @@ SoftwareSerial ss(RXPin, TXPin); //la connessione tra il gps e il device
 //IMPORTO LA LIBRERIA PER LA EEPROM:
 #include<EEPROM.h>
 //DEFINISCO LE DIMENSIONI DELLA EEPROM:
-#define EEPROM_SIZE 8192 //4096
+#define EEPROM_SIZE 4096 //4096
 
 
 
