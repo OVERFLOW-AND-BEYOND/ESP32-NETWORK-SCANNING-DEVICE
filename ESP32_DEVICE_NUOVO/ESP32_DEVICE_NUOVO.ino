@@ -4940,6 +4940,11 @@ start_address = 0;
 
 }
 
+if (digitalRead(Button_2) == LOW && button_2_last_state == true ){
+button_2_last_state = false;
+
+}
+
 
 
 }
