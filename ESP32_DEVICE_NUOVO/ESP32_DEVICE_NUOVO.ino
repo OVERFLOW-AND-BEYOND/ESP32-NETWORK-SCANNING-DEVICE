@@ -27,7 +27,7 @@ SoftwareSerial ss(RXPin, TXPin); //la connessione tra il gps e il device
 //IMPORTO LA LIBRERIA PER LA EEPROM:
 #include<EEPROM.h>
 //DEFINISCO LE DIMENSIONI DELLA EEPROM:
-#define EEPROM_SIZE 4096
+#define EEPROM_SIZE 8192 //4096
 
 
 
@@ -183,9 +183,9 @@ if (start_screen == 1){
 	}
 
    
-  tft.setCursor(90, 0, 2);
+  tft.setCursor(37, 0, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
-  tft.println("ESP32 EDGE DEVICE");
+  tft.println("ESP32 NETWORK SCANNER -- by PARIDE");
 
   delay(200);
 
@@ -262,8 +262,7 @@ random_address = esp_random();
 
   data_eeprom = EEPROM.read(random_address);
   EEPROM.write(random_address,255);
-  EEPROM.commit();
-  if (EEPROM.read(random_address) == 255){
+if (EEPROM.commit()){
 
   tft.setCursor(195,130, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
@@ -312,8 +311,7 @@ random_address = esp_random();
 
   data_eeprom = EEPROM.read(random_address);
   EEPROM.write(random_address,255);
-  EEPROM.commit();
-  if (EEPROM.read(random_address) == 255){
+if (EEPROM.commit()){
 
   tft.setCursor(195,150, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
@@ -363,8 +361,7 @@ random_address = esp_random();
 
   data_eeprom = EEPROM.read(random_address);
   EEPROM.write(random_address,255);
-  EEPROM.commit();
-  if (EEPROM.read(random_address) == 255){
+if (EEPROM.commit()){
 
   tft.setCursor(195,170, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
@@ -414,8 +411,7 @@ random_address = esp_random();
 
   data_eeprom = EEPROM.read(random_address);
   EEPROM.write(random_address,255);
-  EEPROM.commit();
-  if (EEPROM.read(random_address) == 255){
+if (EEPROM.commit()){
 
   tft.setCursor(195,190, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
@@ -465,8 +461,8 @@ random_address = esp_random();
 
   data_eeprom = EEPROM.read(random_address);
   EEPROM.write(random_address,255);
-  EEPROM.commit();
-  if (EEPROM.read(random_address) == 255){
+  if (EEPROM.commit()){
+  
 
   tft.setCursor(195,210, 2);
   tft.setTextColor(TFT_GREEN);  tft.setTextSize(1);
@@ -838,7 +834,6 @@ if (digitalRead(Button_2) == LOW && button_2_last_state == true ){
 button_2_last_state = false;
 
 }
-
 
 
 
@@ -1785,7 +1780,7 @@ Serial.println("--------------------------------------------");
 Serial.println("");
 
 
-for (int i = 0; i < EEPROM_SIZE; i++){ //LO FACCIO PARTIRE DA UNO PECHE' NELL'ADDRESS 0 CI SARAà MEMORIZZATA LA DIMENSIONE DELLA EEPROM.
+for (int i = 0; i < EEPROM_SIZE; i++){ 
 
 //ESEGUE LE OPERAZIONI
 Serial.print("Address: @ ");
@@ -1825,7 +1820,18 @@ tft.fillRect(21  + (14 * value_barra) ,121,10,28,TFT_GREEN); //DISEGNO LA BARRA
 
 }
 
+Serial.println("");
+Serial.println("LINE DUMP:");
+Serial.println("");
 
+for (int i = 0; i < EEPROM_SIZE; i++){ 
+
+//ESEGUE LE OPERAZIONI
+Serial.print((char) EEPROM.read(i));
+
+}
+
+Serial.println("");
 Serial.println("TRANSMISSION ENDED");
 
 delay(2000);
